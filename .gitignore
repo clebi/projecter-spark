@@ -6,8 +6,6 @@
 # User-specific stuff:
 .idea
 
-*.yml
-
 ## File-based project format:
 *.iws
 
