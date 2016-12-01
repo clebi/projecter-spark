@@ -1,0 +1,7 @@
+authServer:
+  url: http://localhost:3000/oauth/v1/introspect
+  username: subscriber
+  password: subscriber
+
+projecter:
+  port: 9000
