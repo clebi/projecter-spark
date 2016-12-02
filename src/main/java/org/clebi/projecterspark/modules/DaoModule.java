@@ -18,8 +18,9 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.mongodb.MongoClient;
-import com.mongodb.MongoClientOptions;
 
+import org.clebi.projecterspark.daos.ProjectDao;
+import org.clebi.projecterspark.daos.mongo.MongoProjectDao;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 
@@ -28,6 +29,7 @@ public class DaoModule extends AbstractModule {
 
   @Override
   protected void configure() {
+    bind(ProjectDao.class).to(MongoProjectDao.class);
   }
 
   @Provides

@@ -12,32 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.clebi.projecterspark.services;
+package org.clebi.projecterspark.daos.mongo;
 
 import com.google.inject.Inject;
 
 import org.clebi.projecterspark.daos.ProjectDao;
 import org.clebi.projecterspark.models.Project;
-import org.clebi.projecterspark.services.exceptions.AlreadyExistsException;
+import org.mongodb.morphia.Datastore;
 
-public class ProjectService implements IProjectService {
+public class MongoProjectDao implements ProjectDao {
 
-  ProjectDao projectDao;
+  private Datastore datastore;
 
   @Inject
-  public ProjectService(ProjectDao projectDao) {
-    this.projectDao = projectDao;
+  public MongoProjectDao(Datastore datastore) {
+    this.datastore = datastore;
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public Project addProject(Project project, String currentUser) throws AlreadyExistsException {
-    if (!project.getMembers().contains(currentUser)) {
-      project.getMembers().add(currentUser);
-    }
-    projectDao.addProject(project);
-    return project;
+  public void addProject(Project project) {
+    datastore.save(project);
   }
 }

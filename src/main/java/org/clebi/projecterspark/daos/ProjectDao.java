@@ -12,31 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.clebi.projecterspark.models;
+package org.clebi.projecterspark.daos;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Id;
-import org.mongodb.morphia.annotations.Indexed;
+import org.clebi.projecterspark.models.Project;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+public interface ProjectDao {
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Entity("project")
-public class Project {
-
-  @Id
-  @Indexed(unique = true)
-  private String name;
-
-  private List<String> members = new ArrayList<>();
-
-  private Map<String, String> fields;
+  /**
+   * Add a project
+   *
+   * @param project project to add
+   */
+  void addProject(Project project);
 
 }

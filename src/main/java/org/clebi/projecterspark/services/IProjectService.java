@@ -19,6 +19,13 @@ import org.clebi.projecterspark.services.exceptions.AlreadyExistsException;
 
 public interface IProjectService {
 
-  void addProject(Project project, String currentUser) throws AlreadyExistsException;
+  /**
+   * Add project
+   *
+   * @param project     project to add
+   * @param currentUser user adding the project
+   * @throws AlreadyExistsException thrown when project already exists
+   */
+  Project addProject(Project project, String currentUser) throws AlreadyExistsException;
 
 }
