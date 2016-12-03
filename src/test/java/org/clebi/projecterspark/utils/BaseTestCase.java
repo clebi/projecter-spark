@@ -12,23 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.clebi.projecterspark.services;
+package org.clebi.projecterspark.utils;
 
-import org.clebi.projecterspark.models.Project;
-import org.clebi.projecterspark.services.exceptions.AlreadyExistsException;
+import org.junit.Before;
+import org.mockito.MockitoAnnotations;
 
-import java.util.concurrent.ExecutionException;
+public class BaseTestCase {
 
-public interface IProjectService {
-
-  /**
-   * Add project.
-   *
-   * @param project     project to add
-   * @param currentUser user adding the project
-   * @throws AlreadyExistsException thrown when project already exists
-   */
-  Project addProject(Project project, String currentUser)
-      throws AlreadyExistsException, ExecutionException, InterruptedException;
+  @Before
+  public void initMocks() {
+    MockitoAnnotations.initMocks(this);
+  }
 
 }

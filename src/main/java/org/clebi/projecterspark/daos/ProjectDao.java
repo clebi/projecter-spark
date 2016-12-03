@@ -19,7 +19,7 @@ import org.clebi.projecterspark.models.Project;
 public interface ProjectDao {
 
   /**
-   * Add a project
+   * Add a project.
    *
    * @param project project to add
    */

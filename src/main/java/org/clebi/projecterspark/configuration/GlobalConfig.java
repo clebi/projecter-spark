@@ -20,4 +20,6 @@ public interface GlobalConfig {
   
   Projecter getProjecter();
 
+  KafkaConfig getKafka();
+
 }

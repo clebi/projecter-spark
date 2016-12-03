@@ -29,9 +29,6 @@ public class MongoProjectDao implements ProjectDao {
     this.datastore = datastore;
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public void addProject(Project project) {
     datastore.save(project);

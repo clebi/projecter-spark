@@ -12,23 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.clebi.projecterspark.services;
+package org.clebi.projecterspark.configuration;
 
-import org.clebi.projecterspark.models.Project;
-import org.clebi.projecterspark.services.exceptions.AlreadyExistsException;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.concurrent.ExecutionException;
+import java.util.List;
 
-public interface IProjectService {
+@Data
+@AllArgsConstructor(access = AccessLevel.PUBLIC)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
+public class KafkaConfig {
 
-  /**
-   * Add project.
-   *
-   * @param project     project to add
-   * @param currentUser user adding the project
-   * @throws AlreadyExistsException thrown when project already exists
-   */
-  Project addProject(Project project, String currentUser)
-      throws AlreadyExistsException, ExecutionException, InterruptedException;
+  private List<String> brokers;
 
 }

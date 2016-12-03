@@ -12,23 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.clebi.projecterspark.services;
+package org.clebi.projecterspark.services.events;
 
 import org.clebi.projecterspark.models.Project;
-import org.clebi.projecterspark.services.exceptions.AlreadyExistsException;
 
 import java.util.concurrent.ExecutionException;
 
-public interface IProjectService {
+public interface ProjectEventService {
 
-  /**
-   * Add project.
-   *
-   * @param project     project to add
-   * @param currentUser user adding the project
-   * @throws AlreadyExistsException thrown when project already exists
-   */
-  Project addProject(Project project, String currentUser)
-      throws AlreadyExistsException, ExecutionException, InterruptedException;
+  void addProject(Project project) throws ExecutionException, InterruptedException;
 
 }

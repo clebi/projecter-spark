@@ -5,3 +5,7 @@ authServer:
 
 projecter:
   port: 9000
+
+kafka:
+  brokers:
+    - 'localhost:9092'

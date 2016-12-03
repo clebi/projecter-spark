@@ -12,23 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.clebi.projecterspark.services;
+package org.clebi.projecterspark.models.serialize;
 
-import org.clebi.projecterspark.models.Project;
-import org.clebi.projecterspark.services.exceptions.AlreadyExistsException;
+import org.apache.kafka.common.serialization.Serializer;
 
-import java.util.concurrent.ExecutionException;
+import java.util.Map;
 
-public interface IProjectService {
+public class KafkaJsonSerializer implements Serializer<Object> {
 
-  /**
-   * Add project.
-   *
-   * @param project     project to add
-   * @param currentUser user adding the project
-   * @throws AlreadyExistsException thrown when project already exists
-   */
-  Project addProject(Project project, String currentUser)
-      throws AlreadyExistsException, ExecutionException, InterruptedException;
+  @Override
+  public void configure(Map<String, ?> configs, boolean isKey) {
 
+  }
+
+  @Override
+  public byte[] serialize(String topic, Object data) {
+    return JsonFactory.getGson().toJson(data).getBytes();
+  }
+
+  @Override
+  public void close() {
+
+  }
 }

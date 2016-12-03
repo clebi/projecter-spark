@@ -18,26 +18,30 @@ import com.google.inject.Inject;
 
 import org.clebi.projecterspark.daos.ProjectDao;
 import org.clebi.projecterspark.models.Project;
+import org.clebi.projecterspark.services.events.ProjectEventService;
 import org.clebi.projecterspark.services.exceptions.AlreadyExistsException;
+
+import java.util.concurrent.ExecutionException;
 
 public class ProjectService implements IProjectService {
 
-  ProjectDao projectDao;
+  private ProjectDao projectDao;
+  private ProjectEventService projectEventService;
 
   @Inject
-  public ProjectService(ProjectDao projectDao) {
+  public ProjectService(ProjectDao projectDao, ProjectEventService projectEventService) {
     this.projectDao = projectDao;
+    this.projectEventService = projectEventService;
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
-  public Project addProject(Project project, String currentUser) throws AlreadyExistsException {
+  public Project addProject(Project project, String currentUser)
+      throws AlreadyExistsException, ExecutionException, InterruptedException {
     if (!project.getMembers().contains(currentUser)) {
       project.getMembers().add(currentUser);
     }
     projectDao.addProject(project);
+    projectEventService.addProject(project);
     return project;
   }
 }

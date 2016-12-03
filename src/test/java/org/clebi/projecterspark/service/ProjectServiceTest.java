@@ -14,21 +14,26 @@
 
 package org.clebi.projecterspark.service;
 
+import static org.mockito.Mockito.verify;
+
 import org.clebi.projecterspark.daos.ProjectDao;
 import org.clebi.projecterspark.models.Project;
 import org.clebi.projecterspark.services.ProjectService;
+import org.clebi.projecterspark.services.events.ProjectEventService;
 import org.clebi.projecterspark.services.exceptions.AlreadyExistsException;
+import org.clebi.projecterspark.utils.BaseTestCase;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.Mockito;
+import org.mockito.Mock;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
-public class ProjectServiceTest {
+public class ProjectServiceTest extends BaseTestCase {
 
   private static Project createTestProject() {
     String[] user_list = {"user1", "user2"};
@@ -38,23 +43,29 @@ public class ProjectServiceTest {
     return new Project("test", new ArrayList<>(Arrays.asList(user_list)), fields);
   }
 
+  @Mock
+  private ProjectDao projectDaoMock;
+
+  @Mock
+  private ProjectEventService projectEventServiceMock;
+
   @Test
-  public void testAddProject() throws AlreadyExistsException {
-    ProjectDao projectDao = Mockito.mock(ProjectDao.class);
+  public void testAddProject() throws AlreadyExistsException, ExecutionException, InterruptedException {
     Project projectToAdd = createTestProject();
-    ProjectService projectService = new ProjectService(projectDao);
+    ProjectService projectService = new ProjectService(projectDaoMock, projectEventServiceMock);
     projectService.addProject(projectToAdd, projectToAdd.getMembers().get(0));
-    Mockito.verify(projectDao).addProject(projectToAdd);
+    verify(projectDaoMock).addProject(projectToAdd);
+    verify(projectEventServiceMock).addProject(projectToAdd);
   }
 
   @Test
-  public void testAddProjectWithNoUsers() throws AlreadyExistsException {
+  public void testAddProjectWithNoUsers() throws AlreadyExistsException, ExecutionException, InterruptedException {
     String user = "missing_user";
-    ProjectDao projectDao = Mockito.mock(ProjectDao.class);
     Project projectToAdd = createTestProject();
-    ProjectService projectService = new ProjectService(projectDao);
+    ProjectService projectService = new ProjectService(projectDaoMock, projectEventServiceMock);
     Project project = projectService.addProject(projectToAdd, user);
-    Mockito.verify(projectDao).addProject(projectToAdd);
+    verify(projectDaoMock).addProject(projectToAdd);
+    verify(projectEventServiceMock).addProject(projectToAdd);
     Assert.assertThat(project.getMembers(), CoreMatchers.hasItem(user));
   }
 

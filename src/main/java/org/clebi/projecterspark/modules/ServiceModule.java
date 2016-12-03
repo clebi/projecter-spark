@@ -18,10 +18,13 @@ import com.google.inject.AbstractModule;
 
 import org.clebi.projecterspark.services.IProjectService;
 import org.clebi.projecterspark.services.ProjectService;
+import org.clebi.projecterspark.services.events.ProjectEventService;
+import org.clebi.projecterspark.services.events.kafka.KafkaProjectEventService;
 
 public class ServiceModule extends AbstractModule {
   @Override
   protected void configure() {
     bind(IProjectService.class).to(ProjectService.class);
+    bind(ProjectEventService.class).to(KafkaProjectEventService.class);
   }
 }
