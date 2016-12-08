@@ -18,8 +18,18 @@ import org.clebi.projecterspark.models.Project;
 
 import java.util.concurrent.ExecutionException;
 
+/**
+ * Project event service.
+ */
 public interface ProjectEventService {
 
+  /**
+   * Add project to event service.
+   *
+   * @param project project to add
+   * @throws ExecutionException   error pushing project to event server
+   * @throws InterruptedException event thread was interrupted
+   */
   void addProject(Project project) throws ExecutionException, InterruptedException;
 
 }

@@ -30,7 +30,8 @@ public class AlreadyExistsException extends ServiceException {
     super(cause);
   }
 
-  public AlreadyExistsException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+  public AlreadyExistsException(
+      String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
     super(message, cause, enableSuppression, writableStackTrace);
   }
 }

@@ -19,6 +19,7 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.mongodb.MongoClient;
 
+import org.clebi.projecterspark.configuration.GlobalConfig;
 import org.clebi.projecterspark.daos.ProjectDao;
 import org.clebi.projecterspark.daos.mongo.MongoProjectDao;
 import org.mongodb.morphia.Datastore;
@@ -27,6 +28,12 @@ import org.mongodb.morphia.Morphia;
 
 public class DaoModule extends AbstractModule {
 
+  private GlobalConfig config;
+
+  public DaoModule(GlobalConfig config) {
+    this.config = config;
+  }
+
   @Override
   protected void configure() {
     bind(ProjectDao.class).to(MongoProjectDao.class);
@@ -34,7 +41,7 @@ public class DaoModule extends AbstractModule {
 
   @Provides
   @Singleton
-  Datastore esProvider() {
+  Datastore mongoProvider() {
     final Morphia morphia = new Morphia();
 
     morphia.mapPackage("org.clebi.projecterspark.model");

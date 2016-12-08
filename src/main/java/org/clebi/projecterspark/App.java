@@ -15,19 +15,24 @@
 package org.clebi.projecterspark;
 
 import com.google.inject.Guice;
-import com.google.inject.Inject;
 import com.google.inject.Injector;
 
 import org.clebi.projecterspark.configuration.GlobalConfig;
+import org.clebi.projecterspark.configuration.YamlGlobalConfig;
 import org.clebi.projecterspark.controllers.ProjecterController;
 import org.clebi.projecterspark.modules.ConfigModule;
 import org.clebi.projecterspark.modules.DaoModule;
+import org.clebi.projecterspark.modules.EventModule;
 import org.clebi.projecterspark.modules.FilterModule;
 import org.clebi.projecterspark.modules.ServiceModule;
 import org.clebi.projecterspark.modules.WsModule;
 import org.clebi.projecterspark.modules.exceptions.ConfigurationException;
-import org.clebi.projecterspark.modules.providers.ConfigCheckedProvider;
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.Constructor;
 import spark.Spark;
+
+import java.io.File;
+import java.io.FileInputStream;
 
 public class App {
 
@@ -37,22 +42,29 @@ public class App {
    * @param args program arguments
    */
   public static void main(String[] args) throws ConfigurationException {
+    GlobalConfig config = getConfig();
     Injector injector = Guice.createInjector(
-        new DaoModule(),
+        new ConfigModule(config),
+        new DaoModule(config),
+        new EventModule(config),
         new ServiceModule(),
-        new ConfigModule(),
         new FilterModule(),
         new WsModule());
-    final SparkConfig config = injector.getInstance(SparkConfig.class);
-    final ProjecterController controller = injector.getInstance(ProjecterController.class);
+    Spark.port(config.getProjecter().getPort());
+    injector.getInstance(ProjecterController.class);
   }
 
-  private static class SparkConfig {
-
-    @Inject
-    public SparkConfig(ConfigCheckedProvider<GlobalConfig> configProvider) throws ConfigurationException {
-      GlobalConfig config = configProvider.get();
-      Spark.port(config.getProjecter().getPort());
+  private static GlobalConfig getConfig() throws ConfigurationException {
+    String confPath = System.getProperty("global.config.path");
+    if (confPath == null) {
+      throw new ConfigurationException("missing config path");
+    }
+    try (FileInputStream configFile = new FileInputStream(new File(confPath))) {
+      return (YamlGlobalConfig) new Yaml(
+          new Constructor(YamlGlobalConfig.class)).load(configFile);
+    } catch (Exception exc) {
+      throw new ConfigurationException("unable to read configuration file", exc);
     }
   }
+
 }

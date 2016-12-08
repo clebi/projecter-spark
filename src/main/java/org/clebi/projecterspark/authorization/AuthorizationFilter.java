@@ -52,9 +52,9 @@ public class AuthorizationFilter implements Filter {
    * @throws ConfigurationException an error happened during configuration loading
    */
   @Inject
-  public AuthorizationFilter(Client wsClient, ConfigCheckedProvider<GlobalConfig> config)
+  public AuthorizationFilter(Client wsClient, GlobalConfig config)
       throws ConfigurationException {
-    GlobalConfig current = config.get();
+    GlobalConfig current = config;
     this.urlAuthServer = current.getAuthServer().getUrl();
     this.auth = current.getAuthServer().getUsername() + ":" + current.getAuthServer().getPassword();
     this.wsClient = wsClient;
@@ -65,9 +65,10 @@ public class AuthorizationFilter implements Filter {
     String authHeader = request.headers(AUTHORIZATION_HEADER);
     if (authHeader == null) {
       halt(401, gson.toJson(new ErrorResponse("auth_error", "missing token")));
+      return;
     }
     String token = authHeader.replace("Bearer ", "");
-    String basicAuthHeader = "Basic " + java.util.Base64.getEncoder().encodeToString(auth.getBytes());
+    String basicAuthHeader = "Basic " + java.util.Base64.getEncoder().encodeToString(auth.getBytes("utf-8"));
     Form form = new Form();
     form.param("token", token);
     try {

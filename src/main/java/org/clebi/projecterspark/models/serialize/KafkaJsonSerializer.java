@@ -16,6 +16,7 @@ package org.clebi.projecterspark.models.serialize;
 
 import org.apache.kafka.common.serialization.Serializer;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 public class KafkaJsonSerializer implements Serializer<Object> {
@@ -27,7 +28,11 @@ public class KafkaJsonSerializer implements Serializer<Object> {
 
   @Override
   public byte[] serialize(String topic, Object data) {
-    return JsonFactory.getGson().toJson(data).getBytes();
+    try {
+      return JsonFactory.getGson().toJson(data).getBytes("utf-8");
+    } catch (UnsupportedEncodingException exc) {
+      throw new RuntimeException("unable to serialize object for topic: " + topic, exc);
+    }
   }
 
   @Override
