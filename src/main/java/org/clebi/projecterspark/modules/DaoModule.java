@@ -46,7 +46,8 @@ public class DaoModule extends AbstractModule {
 
     morphia.mapPackage("org.clebi.projecterspark.model");
 
-    final Datastore datastore = morphia.createDatastore(new MongoClient("localhost", 27017), "projecter");
+    final Datastore datastore = morphia.createDatastore(
+        new MongoClient(config.getMongo().getHost(), config.getMongo().getPort()), config.getMongo().getDatabase());
     datastore.ensureIndexes();
     return datastore;
   }

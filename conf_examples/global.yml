@@ -3,9 +3,14 @@ authServer:
   username: subscriber
   password: subscriber
 
-projecter:
-  port: 9000
+mongo:
+  host: 'localhost'
+  port: 27017
+  database: 'projecter'
 
 kafka:
   brokers:
     - 'localhost:9092'
+
+projecter:
+  port: 9000

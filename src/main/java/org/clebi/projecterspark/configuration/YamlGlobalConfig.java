@@ -27,6 +27,7 @@ public class YamlGlobalConfig implements GlobalConfig {
   private AuthServer authServer;
   private Projecter projecter;
   private KafkaConfig kafka;
+  private MongoConfig mongo;
 
   public AuthServer getAuthServer() {
     return this.authServer;
